@@ -1,5 +1,3 @@
-Markdown
-
 # 🚀 Odoo 12 HRMS - Docker Deployment Guide (Windows)
 
 [![Odoo](https://img.shields.io/badge/Odoo-12.0-purple.svg)](https://www.odoo.com/)
@@ -55,13 +53,16 @@ odoo-hrms/
 │   ├── asa_payroll/         # Contoh modul 1
 │   └── asa_custom_hrms/     # Contoh modul 2
 └── docker-compose.yml       # File konfigurasi (Dibuat di langkah berikutnya)
-❌ PENTING: Jangan membuat folder config atau data secara manual. Biarkan Docker membuatnya otomatis untuk menghindari error Permission Denied.
+```
+> ❌ **PENTING:** Jangan membuat folder `config` atau `data` secara manual. Biarkan Docker membuatnya otomatis untuk menghindari error Permission Denied.
 
-3. Konfigurasi Docker Compose
-Buat file baru bernama docker-compose.yml di dalam folder odoo-hrms. Copy-paste konfigurasi stabil berikut:
+---
 
-YAML
+## 3. Konfigurasi Docker Compose
 
+Buat file baru bernama `docker-compose.yml` di dalam folder `odoo-hrms`. Copy-paste konfigurasi stabil berikut:
+
+```yaml
 version: '3.1'
 services:
   web:
@@ -90,101 +91,99 @@ services:
 volumes:
   odoo-web-data:
   odoo-db-data:
-4. Instalasi & Menjalankan Odoo
-Buka terminal (PowerShell atau Git Bash) di dalam folder odoo-hrms, lalu jalankan perintah berikut:
+```
 
-1. Jalankan Container
-PowerShell
+---
 
+## 4. Instalasi & Menjalankan Odoo
+
+Buka terminal (PowerShell atau Git Bash) di dalam folder `odoo-hrms`, lalu jalankan perintah berikut:
+
+### 1. Jalankan Container
+```powershell
 docker-compose up -d
+```
 Tunggu proses download image selesai.
 
-2. Cek Status Log
+### 2. Cek Status Log
 Pastikan tidak ada error dengan memantau log:
 
-PowerShell
-
+```powershell
 docker-compose logs -f --tail=20
-Jika muncul tulisan: HTTP service (werkzeug) running on ..., berarti Odoo sudah aktif. Tekan Ctrl + C untuk keluar dari log.
+```
+Jika muncul tulisan: `HTTP service (werkzeug) running on ...`, berarti Odoo sudah aktif. Tekan `Ctrl + C` untuk keluar dari log.
 
-5. Setup Database Awal
-Buka browser dan akses: http://localhost:8069
+---
+
+## 5. Setup Database Awal
+
+Buka browser dan akses: [http://localhost:8069](http://localhost:8069)
 
 Isi formulir pembuatan database:
 
-Master Password: (Password admin server, catat dan simpan!)
+- **Master Password:** (Password admin server, catat dan simpan!)
+- **Database Name:** `hrms_db`
+- **Email:** `admin`
+- **Password:** `admin`
+- **Country:** `Indonesia` (Wajib, agar mata uang otomatis IDR).
+- **Demo Data:** ⬜ Jangan dicentang (Uncheck).
 
-Database Name: hrms_db
+Klik **Create Database**.
 
-Email: admin
+---
 
-Password: admin
+## 6. Instalasi Custom Addons (Payroll/HRMS)
 
-Country: Indonesia (Wajib, agar mata uang otomatis IDR).
-
-Demo Data: ⬜ Jangan dicentang (Uncheck).
-
-Klik Create Database.
-
-6. Instalasi Custom Addons (Payroll/HRMS)
 Langkah ini krusial agar modul dari folder Windows terbaca oleh sistem Linux Odoo.
 
-Langkah 1: Copy Modul
-Masukkan folder modul custom (misal: asa_payroll_indonesia) ke dalam folder odoo-hrms/addons. Pastikan strukturnya: addons/nama_modul/__manifest__.py
+### Langkah 1: Copy Modul
+Masukkan folder modul custom (misal: `asa_payroll_indonesia`) ke dalam folder `odoo-hrms/addons`. Pastikan strukturnya: `addons/nama_modul/__manifest__.py`
 
-Langkah 2: Fix Permission (WAJIB di Windows)
+### Langkah 2: Fix Permission (WAJIB di Windows)
 Eksekusi perintah ini di terminal agar Odoo bisa membaca file dari Windows:
 
-PowerShell
-
+```powershell
 docker-compose exec -u root web chmod -R 777 /mnt/extra-addons
-Langkah 3: Restart Service
-PowerShell
+```
 
+### Langkah 3: Restart Service
+```powershell
 docker-compose restart web
-Langkah 4: Install via GUI
-Login ke Odoo.
+```
 
-Aktifkan Developer Mode: Masuk Settings > Scroll paling bawah > Klik Activate the developer mode.
+### Langkah 4: Install via GUI
+1. Login ke Odoo.
+2. Aktifkan Developer Mode: Masuk **Settings** > Scroll paling bawah > Klik **Activate the developer mode**.
+3. Masuk menu **Apps**.
+4. Klik **Update Apps List** (Menu atas) > **Update**.
+5. Hapus filter "Apps" pada kolom pencarian (Klik tanda silang kecil).
+6. Cari nama modul dan klik **Install**.
 
-Masuk menu Apps.
+---
 
-Klik Update Apps List (Menu atas) > Update.
+## 7. Troubleshooting & Solusi Error
 
-Hapus filter "Apps" pada kolom pencarian (Klik tanda silang kecil).
-
-Cari nama modul dan klik Install.
-
-7. Troubleshooting & Solusi Error
 Daftar masalah umum yang sering terjadi saat instalasi di Windows.
 
-🔴 Kasus A: Tampilan Rusak / Layar Putih (Broken Assets)
+### 🔴 Kasus A: Tampilan Rusak / Layar Putih (Broken Assets)
 Biasanya terjadi setelah Restore Database. Odoo kehilangan file CSS/Style. Solusi:
 
-Ubah URL browser menjadi: http://localhost:8069/web?debug=assets
+1. Ubah URL browser menjadi: `http://localhost:8069/web?debug=assets`
+2. Setelah menu terlihat, masuk ke **Settings** > **Technical** > **Database Structure** > **Attachments**.
+3. Cari file dengan nama `web.assets...`.
+4. Hapus semua file tersebut.
+5. Refresh browser (hapus `?debug=assets` dari URL).
 
-Setelah menu terlihat, masuk ke Settings > Technical > Database Structure > Attachments.
-
-Cari file dengan nama web.assets....
-
-Hapus semua file tersebut.
-
-Refresh browser (hapus ?debug=assets dari URL).
-
-🔴 Kasus B: Modul Tidak Muncul di Pencarian
+### 🔴 Kasus B: Modul Tidak Muncul di Pencarian
 Solusi:
+- Pastikan filter default "Apps" di search bar sudah dihapus.
+- Pastikan struktur folder tidak ganda (Contoh salah: `addons/modul_folder/modul_asli/__manifest__.py`).
+- Pastikan modul induk (Dependencies) sudah terinstall lebih dulu.
 
-Pastikan filter default "Apps" di search bar sudah dihapus.
-
-Pastikan struktur folder tidak ganda (Contoh salah: addons/modul_folder/modul_asli/__manifest__.py).
-
-Pastikan modul induk (Dependencies) sudah terinstall lebih dulu.
-
-🔴 Kasus C: Gagal Restore Database (Connection Lost)
+### 🔴 Kasus C: Gagal Restore Database (Connection Lost)
 Solusi: Ini biasanya masalah RAM atau Timeout.
+- Pastikan langkah **Virtual Memory** (Bab 1) sudah dilakukan.
+- Jika file backup sangat besar (>200MB), gunakan metode restore manual via terminal (`psql`).
 
-Pastikan langkah Virtual Memory (Bab 1) sudah dilakukan.
-
-Jika file backup sangat besar (>200MB), gunakan metode restore manual via terminal (psql).
-
-Dokumentasi dibuat untuk Odoo HRMS Indonesia Deployment.
+---
+*Dokumentasi dibuat untuk Odoo HRMS Indonesia Deployment.*
