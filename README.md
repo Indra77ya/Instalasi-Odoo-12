@@ -113,6 +113,14 @@ docker-compose logs -f --tail=20
 ```
 Jika muncul tulisan: `HTTP service (werkzeug) running on ...`, berarti Odoo sudah aktif. Tekan `Ctrl + C` untuk keluar dari log.
 
+### 3. Mematikan Server
+Jika ingin mematikan server Odoo, jalankan perintah berikut:
+
+```powershell
+docker-compose down
+```
+Perintah ini akan menghentikan dan menghapus container, namun **data database tetap aman** karena tersimpan di Volume.
+
 ---
 
 ## 5. Setup Database Awal
