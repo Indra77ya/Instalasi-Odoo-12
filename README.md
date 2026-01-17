@@ -15,7 +15,8 @@ Panduan lengkap instalasi dan deployment **Odoo 12 (Community Edition)** dengan 
 4. [Instalasi & Menjalankan Odoo](#4-instalasi--menjalankan-odoo)
 5. [Setup Database Awal](#5-setup-database-awal)
 6. [Instalasi Custom Addons (Payroll/HRMS)](#6-instalasi-custom-addons-payrollhrms)
-7. [Troubleshooting & Solusi Error](#7-troubleshooting--solusi-error)
+7. [Menghentikan & Menyalakan Kembali Server](#7-menghentikan--menyalakan-kembali-server)
+8. [Troubleshooting & Solusi Error](#8-troubleshooting--solusi-error)
 
 ---
 
@@ -161,7 +162,28 @@ docker-compose restart web
 
 ---
 
-## 7. Troubleshooting & Solusi Error
+## 7. Menghentikan & Menyalakan Kembali Server
+
+Setelah selesai menggunakan Odoo, sangat disarankan untuk mematikan server dengan benar agar **data tidak corrupt** (terutama database).
+
+### 1. Mematikan Server (Safe Shutdown)
+Jalankan perintah ini di terminal:
+
+```powershell
+docker-compose down
+```
+> ✅ **Aman:** Perintah ini akan menghentikan container secara prosedural (*Graceful Shutdown*) sehingga database PostgreSQL sempat menyimpan data dengan benar ke Volume sebelum mati.
+
+### 2. Menyalakan Kembali
+Untuk menjalankan kembali di lain waktu, cukup ketik:
+
+```powershell
+docker-compose up -d
+```
+
+---
+
+## 8. Troubleshooting & Solusi Error
 
 Daftar masalah umum yang sering terjadi saat instalasi di Windows.
 
