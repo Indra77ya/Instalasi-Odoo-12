@@ -4,7 +4,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
 
-Panduan lengkap instalasi dan deployment **Odoo 12 (Community Edition)** dengan fokus pada modul **HRMS & Payroll Indonesia** menggunakan Docker di lingkungan Windows. Panduan ini mencakup optimasi sistem untuk perangkat spesifikasi rendah (RAM 4GB) hingga troubleshooting masalah umum.
+Panduan lengkap instalasi dan deployment **Odoo 12 (Community Edition)** dengan fokus pada modul **HRMS** menggunakan Docker di lingkungan Windows. Panduan ini mencakup optimasi sistem untuk perangkat spesifikasi rendah (RAM 4GB) hingga troubleshooting masalah umum.
 
 ---
 
